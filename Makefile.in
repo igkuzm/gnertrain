@@ -1,0 +1,111 @@
+# File              : Makefile.in
+# Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
+# Date              : 05.10.2021
+# Last Modified Date: 13.11.2022
+# Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
+#!/usr/bin/make -f
+
+CC=@CC@
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+
+top_srcdir	= @top_srcdir@
+srcdir		= @srcdir@
+VPATH		= $(srcdir)
+
+DESTDIR		=
+bindir		= @bindir@
+includedir	= @includedir@
+libdir		= @libdir@
+shlibdir	= @shlibdir@
+datarootdir	= @datarootdir@
+datadir		= @datadir@
+mandir		= @mandir@
+
+TARGETOS=@TARGETOS@
+
+GTKCFLAGS = @GTKCFLAGS@
+GTKLIBS = @GTKLIBS@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
+CROSS_COMPILING=@CROSS_COMPILING@
+
+ARCHS=@ARCHS@
+
+CFLAGS=@CFLAGS@
+LDFLAGS=@LDFLAGS@
+
+ifeq ($(TARGETOS),Darwin)
+	BUILD_DIR=build
+	#LDFLAGS += 	
+
+	APPINSTALL=\
+		mkdir -p $(BUILD_DIR)/$(APPNAME).app/Contents/MacOS;\
+		mkdir -p $(BUILD_DIR)$(APPNAME).app/Contents/Frameworks;\
+		mkdir -p $(BUILD_DIR)/$(APPNAME).app/Contents/Resources;\
+		cp $(BUILD_DIR)/$(APPNAME) $(BUILD_DIR)/$(APPNAME).app/Contents/MacOS/.;\
+		cp $(BUILD_DIR)/*.dylib $(BUILD_DIR)/$(APPNAME).app/Contents/Frameworks/.;\
+		cp -R Resources/* $(BUILD_DIR)/$(APPNAME).app/Contents/Resources/.
+		#INSTALLGTK=\
+			#cp -r third_party/GTK_Framework/x86_64/GTK APPLICATIONS/MacOS/GUV.app/Contents/Frameworks/.;\
+			#./third_party/installGTKframework.sh APPLICATIONS/MacOS/GUV.app
+endif
+ifeq ($(TARGETOS),Linux)
+	BUILD_DIR=build
+	INSTALL=\
+		install $(BUILD_DIR)/$(APPNAME) $(bindir)/.; \
+		install $(BUILD_DIR)/*.so $(libdir)/.; \
+		install src/*.h $(includedir)/.; \
+		ldconfig
+	UNINSTALLAPP=$(RM) $(bindir)/$(APPNAME)
+	UNINSTALLLIB=$(RM) $(libdir)/$(LIBNAME)
+	UNINSTALLOTHER=\
+		#$(RM) $(includedir)/libuv.h;\
+		#$(RM) $(libdir)/libuv.so;\
+		#$(RM) -r $(datarootdir)/$(APPNAME)
+	#LDFLAGS += 
+endif
+ifeq ($(TARGETOS),Windows)
+	BUILD_DIR=build
+	LDFLAGS += -LGTK_win32/ -L$(BUILD_DIR)
+	WINDOWSGUI = -mwindows
+endif
+
+
+OBJECTS = $(BUILD_DIR)/GNerdTrain.o
+
+EXECUTABLE=$(BUILD_DIR)/GNerdTrain
+
+all: $(EXECUTABLE)
+
+$(BUILD_DIR)/GNerdTrain: $(BUILD_DIR)/*.o
+	$(CC)  $^ -o $@ -L$(BUILD_DIR) $(CFLAGS) $(LDFLAGS) $(GTKLIBS) $(GTKCFLAGS) $(WINDOWSGUI) 
+
+$(BUILD_DIR)/*.o: *.c
+	#🟢Building objects
+	#🟢Create build directory
+	mkdir -p $(BUILD_DIR)
+	#🟢Compile sources to objects
+	$(foreach arch, $(ARCHS), $(foreach source, $^, mkdir -p $(BUILD_DIR)/$(arch); $(CC) -c $(source) -arch $(arch) -o $(BUILD_DIR)/$(arch)/$(source:%.c=%.o) $(GTKLIBS) $(GTKCFLAGS); ) )
+	#🟢Lipo objects to FAT
+	$(foreach source, $^, lipo -create $(foreach arch, $(ARCHS), $(BUILD_DIR)/$(arch)/$(source:%.c=%.o) ) -o $(BUILD_DIR)/$(source:%.c=%.o); )
+
+clean:
+	$(RM) -r build
+	#$(RM) Makefile
+
+appinstall: all
+	$(foreach var, $(EXECUTABLE), $(eval APPNAME=$(var)) $(APPINSTALL);)		
+	$(INSTALLGTK)
+
+install: appinstall
+	$(foreach var, $(EXECUTABLE), $(eval APPNAME=$(var)) $(INSTALL);)		
+
+uninstall:
+	$(RM) -r APPLICATIONS
+	$(foreach var, $(EXECUTABLE), $(eval APPNAME=$(var)) $(UNINSTALLAPP);)		
+	$(foreach var, $(SHAREDLIBS), $(eval LIBNAME=lib$(var:%.c=%.so)) $(UNINSTALLLIB);)		
+	$(UNINSTALLOTHER)
+
+.PHONY: all clean install appinstall uninstall
+

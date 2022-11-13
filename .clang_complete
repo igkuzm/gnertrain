@@ -1,0 +1,13 @@
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/gtk-2.0
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/lib/gtk-2.0/include
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/gtk-2.0
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/pango-1.0
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/atk-1.0
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/cairo
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/pixman-1
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/libpng12
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/pango-1.0
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/glib-2.0
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/lib/glib-2.0/include
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/freetype2
+-I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include
