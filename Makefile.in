@@ -1,7 +1,7 @@
 # File              : Makefile.in
 # Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
 # Date              : 05.10.2021
-# Last Modified Date: 13.11.2022
+# Last Modified Date: 14.11.2022
 # Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
 #!/usr/bin/make -f
 
@@ -78,8 +78,14 @@ EXECUTABLE=$(BUILD_DIR)/GNerdTrain
 
 all: $(EXECUTABLE)
 
-$(BUILD_DIR)/GNerdTrain: $(BUILD_DIR)/*.o
+$(BUILD_DIR)/GNerdTrain: $(BUILD_DIR)/*.o $(BUILD_DIR)/docx/*.o
 	$(CC)  $^ -o $@ -L$(BUILD_DIR) $(CFLAGS) $(LDFLAGS) $(GTKLIBS) $(GTKCFLAGS) $(WINDOWSGUI) 
+
+$(BUILD_DIR)/docx/*.o: readdocs/docx.c readdocs/zip/src/zip.c readdocs/ezxml/ezxml.c
+	mkdir -p $(BUILD_DIR)/docx
+	$(CC) -c readdocs/docx.c -o $(BUILD_DIR)/docx/docx.o
+	$(CC) -c readdocs/zip/src/zip.c -o $(BUILD_DIR)/docx/zip.o
+	$(CC) -c readdocs/ezxml/ezxml.c -o $(BUILD_DIR)/docx/ezxml.o
 
 $(BUILD_DIR)/*.o: *.c
 	#🟢Building objects

@@ -1,0 +1,3 @@
+[submodule "readdocs"]
+	path = readdocs
+	url = http://github.com/igkuzm/readdocs
