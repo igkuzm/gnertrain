@@ -19,12 +19,12 @@ open_file(GFile *file, GtkTextBuffer *buffer){
 	gchar *type = g_content_type_guess(filename, NULL, 0, NULL);
 	g_print("TYPE: %s\n", type);
 
-	if (g_content_type_is_mime_type(type, "application/msword")){
+	if (strcmp(g_content_type_get_mime_type(type), "application/msword") == 0){
 		g_print("DOC\n");
 		/*const char *text = readdocs_doc(filename);*/
 		/*gtk_text_buffer_set_text(buffer, text, -1);*/
 	}
-	else if (g_content_type_is_mime_type(type, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")){
+	else if (strcmp(g_content_type_get_mime_type(type), "application/vnd.openxmlformats-officedocument.wordprocessingml.document") == 0){
 		g_print("DOCX\n");
 		const char *text = readdocs_docx(filename);
 		gtk_text_buffer_set_text(buffer, text, -1);
@@ -38,7 +38,7 @@ on_open_response (GtkDialog *dialog,
 	GtkTextBuffer *buffer = gtk_object_get_data(GTK_OBJECT(dialog), "buffer");	
 	if (response == GTK_RESPONSE_ACCEPT){
 		GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
-		g_autoptr(GFile) file = gtk_file_chooser_get_file (chooser);
+		GFile *file = gtk_file_chooser_get_file (chooser);
 		open_file (file, buffer);
 	}
 	gtk_widget_destroy (GTK_WIDGET(dialog));
