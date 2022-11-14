@@ -1,8 +1,0 @@
-[
-  {
-    "directory": "/Users/kuzmich/src/gmertrain/src/gnertrain",
-    "command": "clang -std=c99 -I. -I.. -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/gtk-2.0 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/lib/gtk-2.0/include -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/gtk-2.0 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/pango-1.0 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/atk-1.0 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/cairo -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/pixman-1 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/libpng12 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/pango-1.0 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/glib-2.0 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/lib/glib-2.0/include -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include/freetype2 -I/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/include -L/Library/Frameworks/GTK+.framework/Versions/2.14.X11/Resources/lib -lgtk-x11-2.0 -lgdk-x11-2.0 -lgdk_pixbuf-2.0 -lpangocairo-1.0 -latk-1.0 -lcairo -lgio-2.0 -lpangoft2-1.0 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -lfreetype -lz -lfontconfig",
-    "file": "gnertrain.c",
-    "output": "build/MacOS/gnertrain"
-  }
-]
