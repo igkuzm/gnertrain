@@ -58,9 +58,12 @@ int main(int argc, char *argv[]) {
 	GtkWidget *paned = gtk_hpaned_new();
 	gtk_container_add(GTK_CONTAINER(box), paned);
 
+	GtkWidget *textWindow = gtk_scrolled_window_new(NULL, NULL);
+	gtk_paned_add1(GTK_PANED(paned), textWindow);
+	gtk_widget_set_size_request(textWindow, 800, 600);
+
 	GtkWidget *textView = gtk_text_view_new();
-	gtk_widget_set_size_request(textView, 800, 600);
-	gtk_paned_add1(GTK_PANED(paned), textView);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(textWindow), textView);
 	GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(textView));
 	gtk_object_set_data(GTK_OBJECT(window), "buffer", buffer);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), text, -1);
