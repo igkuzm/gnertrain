@@ -39,8 +39,11 @@ AC_SUBST([CROSS_COMPILING])
 AC_PROG_CC
 
 #char ARCHS
-AS_VAR_IF(ARCHS, [], AS_IF([test "$host_cpu" = "powerpc"], ARCHS=ppc,  
-	AS_IF([test "$host_cpu" = "aarch64"], ARCHS=arm64, ARCHS=[$host_cpu])))
+AS_VAR_IF(ARCHS, [], 
+	AS_IF([test "$host_cpu" = "powerpc"], ARCHS=ppc,  
+		AS_IF([test "$host_cpu" = "aarch64"], ARCHS=arm64, ARCHS=[$host_cpu])
+	)
+)
 AC_SUBST([ARCHS])
 
 AC_SUBST([CFLAGS])
