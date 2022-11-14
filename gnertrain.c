@@ -11,8 +11,6 @@
 
 #include "menu.h"
 
-const char text[] = " GTK+ is a library for creating graphical user interfaces.\n It works on many UNIX-like platforms, Windows, and on framebuffer devices. GTK+ is released under the GNU Library General Public License (GNU LGPL), which allows for flexible licensing of client applications. GTK+ has a C-based object-oriented architecture that allows for maximum flexibility. Bindings for other languages have been written, including C++, Objective-C, Guile/Scheme, Perl, Python, TOM, Ada95, Free Pascal, and Eiffel. ";
-
 void show_popup(GtkTextView *entry, GtkMenu *menu, gpointer user_data) {
 	GtkWidget *hideMi = main_pmenu(user_data);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), hideMi);
@@ -66,7 +64,6 @@ int main(int argc, char *argv[]) {
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(textWindow), textView);
 	GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(textView));
 	gtk_object_set_data(GTK_OBJECT(window), "buffer", buffer);
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(buffer), text, -1);
 	g_signal_connect_swapped(G_OBJECT(textView), "populate-popup", 
 			G_CALLBACK(show_popup), window);
 

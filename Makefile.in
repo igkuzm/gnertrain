@@ -78,14 +78,23 @@ EXECUTABLE=$(BUILD_DIR)/GNerdTrain
 
 all: $(EXECUTABLE)
 
-$(BUILD_DIR)/GNerdTrain: $(BUILD_DIR)/*.o $(BUILD_DIR)/docx/*.o
+$(BUILD_DIR)/GNerdTrain: $(BUILD_DIR)/*.o $(BUILD_DIR)/docx/*.o $(BUILD_DIR)/doc/*.o
 	$(CC)  $^ -o $@ -L$(BUILD_DIR) $(CFLAGS) $(LDFLAGS) $(GTKLIBS) $(GTKCFLAGS) $(WINDOWSGUI) 
 
+#docx
 $(BUILD_DIR)/docx/*.o: readdocs/docx.c readdocs/zip/src/zip.c readdocs/ezxml/ezxml.c
 	mkdir -p $(BUILD_DIR)/docx
 	$(CC) -c readdocs/docx.c -o $(BUILD_DIR)/docx/docx.o
 	$(CC) -c readdocs/zip/src/zip.c -o $(BUILD_DIR)/docx/zip.o
 	$(CC) -c readdocs/ezxml/ezxml.c -o $(BUILD_DIR)/docx/ezxml.o
+
+#doc
+$(BUILD_DIR)/doc/*.o: readdocs/doc.c readdocs/libdoc/*.c
+	mkdir -p $(BUILD_DIR)/doc
+	$(CC) -c readdocs/doc.c -o $(BUILD_DIR)/doc/doc.o
+	cd $(BUILD_DIR)/doc && $(CC) -c ../../readdocs/libdoc/*.c
+
+
 
 $(BUILD_DIR)/*.o: *.c
 	#🟢Building objects

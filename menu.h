@@ -28,8 +28,9 @@ open_file(GFile *file, GtkTextBuffer *buffer){
 					|| strcmp(extension, "DOC") == 0
 					|| strcmp(extension, "Doc") == 0
 			   ){
-				//const char *text = readdocs_doc(filename);
-				//gtk_text_buffer_set_text(buffer, text, -1);
+				const char *text = readdocs_doc(filename);
+				g_print("TEXT: %s\n", text);
+				gtk_text_buffer_set_text(buffer, text, -1);
 			}
 			if (strcmp(extension, "docx") == 0 
 					|| strcmp(extension, "DOCX") == 0
@@ -79,14 +80,49 @@ open_file_dialog (GtkButton *button,
 	GtkFileFilter *filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(filter, "*.[dD][oO][cC]");
 	gtk_file_filter_add_pattern(filter, "*.[dD][oO][cC][xX]");
-	//gtk_file_filter_add_mime_type(filter, "application/msword");
-	//gtk_file_filter_add_mime_type(filter, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 	gtk_widget_show (dialog);
 
 	g_signal_connect (dialog, "response",
                     G_CALLBACK (on_open_response),
 					NULL);	
+}
+
+void
+save_file_dialog (GtkButton *button,
+		gpointer   user_data)
+{
+	GtkWidget *dialog;
+	GtkFileChooser *chooser;
+	GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+	gint res;
+
+	dialog = gtk_file_chooser_dialog_new ("Save File",
+										  GTK_WINDOW(user_data),
+										  action,
+										  "Cancel",
+										  GTK_RESPONSE_CANCEL,
+										  "Save",
+										  GTK_RESPONSE_ACCEPT,
+										  NULL);
+	chooser = GTK_FILE_CHOOSER (dialog);
+
+	gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
+
+	gtk_file_chooser_set_current_name (chooser,
+										 "Untitled document");
+
+	res = gtk_dialog_run (GTK_DIALOG (dialog));
+	if (res == GTK_RESPONSE_ACCEPT)
+	  {
+		char *filename;
+
+		filename = gtk_file_chooser_get_filename (chooser);
+		/*save_to_file (filename);*/
+		g_free (filename);
+	  }
+
+	gtk_widget_destroy (dialog);
 }
 
 GtkWidget *
@@ -109,7 +145,9 @@ main_menu_bar(GtkWidget * window)
 			G_CALLBACK(open_file_dialog), window);	
 
 	GtkWidget *saveMi = gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, accel_group);
-	gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), saveMi);	
+	gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), saveMi);
+	g_signal_connect(G_OBJECT(saveMi), "activate",
+			G_CALLBACK(save_file_dialog), window);	
 	
 	GtkWidget *sep = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(fileMenu), sep);
