@@ -8,7 +8,9 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include <string.h>
 #include "readdocs/readdocs.h"
+#include "strsplit.h"
 
 static void 
 open_file(GFile *file, GtkTextBuffer *buffer){
@@ -16,19 +18,29 @@ open_file(GFile *file, GtkTextBuffer *buffer){
 	const char *filename = g_file_get_path(file);
 	g_print("OPEN FILE: %s\n", filename);
 
-	gchar *type = g_content_type_guess(filename, NULL, 0, NULL);
-	g_print("TYPE: %s\n", type);
-
-	if (strcmp(g_content_type_get_mime_type(type), "application/msword") == 0){
-		g_print("DOC\n");
-		/*const char *text = readdocs_doc(filename);*/
-		/*gtk_text_buffer_set_text(buffer, text, -1);*/
+	const char *basename = g_file_get_basename(file);
+	char **tokens = NULL;
+	int count = strsplit(basename, ".", &tokens);
+	if (count > 0){
+		char *extension = tokens[count -1];
+		if (extension){
+			if (strcmp(extension, "doc") == 0 
+					|| strcmp(extension, "DOC") == 0
+					|| strcmp(extension, "Doc") == 0
+			   ){
+				//const char *text = readdocs_doc(filename);
+				//gtk_text_buffer_set_text(buffer, text, -1);
+			}
+			if (strcmp(extension, "docx") == 0 
+					|| strcmp(extension, "DOCX") == 0
+					|| strcmp(extension, "Docx") == 0
+					|| strcmp(extension, "DocX") == 0
+			   ){
+				const char *text = readdocs_docx(filename);
+				gtk_text_buffer_set_text(buffer, text, -1);
+			}			
+		}
 	}
-	else if (strcmp(g_content_type_get_mime_type(type), "application/vnd.openxmlformats-officedocument.wordprocessingml.document") == 0){
-		g_print("DOCX\n");
-		const char *text = readdocs_docx(filename);
-		gtk_text_buffer_set_text(buffer, text, -1);
-	}	
 }
 
 static void
@@ -65,8 +77,10 @@ open_file_dialog (GtkButton *button,
 			gtk_object_get_data(GTK_OBJECT(user_data), "buffer"));
 
 	GtkFileFilter *filter = gtk_file_filter_new();
-	gtk_file_filter_add_mime_type(filter, "application/msword");
-	gtk_file_filter_add_mime_type(filter, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+	gtk_file_filter_add_pattern(filter, "*.[dD][oO][cC]");
+	gtk_file_filter_add_pattern(filter, "*.[dD][oO][cC][xX]");
+	//gtk_file_filter_add_mime_type(filter, "application/msword");
+	//gtk_file_filter_add_mime_type(filter, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 	gtk_widget_show (dialog);
 
