@@ -2,7 +2,7 @@
  * File              : strsplit.h
  * Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
  * Date              : 21.02.2022
- * Last Modified Date: 22.10.2022
+ * Last Modified Date: 19.11.2022
  * Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
  */
 
@@ -22,9 +22,14 @@ extern "C"{
 #include <stdlib.h>
 #include <string.h>
 
-// split string with delims, allocate NULL-terminated array of tokens and return array's size
+// split string with delims, fill NULL-terminated array of tokens and return array's size
 static int strsplit (const char *str, const char *delim, char ***tokens);
 
+// split string with delims and return string at index. set index to -1 to return last
+static char * strisplit(const char *str, const char *delim, int index);
+
+// return allocated string with contents of str from position pos and lendth len 
+static char * strsubstr(const char *str, int pos, int len);
 
 /*
  *
@@ -70,6 +75,57 @@ strsplit (
 	return i;
 }
 
+char * 
+strisplit (
+		const char *str, 
+		const char *delim, 
+		int index
+		)
+{
+	// pointer to string
+	char * ptr = (char *)str;
+
+	//pointer to return string
+	char * substr = NULL;
+
+	int i = 0; //counter
+	// Extract the first token
+	char *token = strtok(ptr, delim);
+	// loop through the string to extract all other tokens
+	while( token != NULL ) {
+		if (i == index){
+			// allocate string
+			substr = malloc(strlen(token) + 1);
+			// copy string
+			strcpy(substr, token);
+			return substr; 
+		}
+		token = strtok(NULL, delim);
+		i++;
+	}
+
+	if (i == -1){
+		// allocate string
+		substr = malloc(strlen(token) + 1);
+		// copy string
+		strcpy(substr, token);
+		return substr;		
+	}
+
+	return NULL;
+}
+
+char * 
+strsubstr(const char *str, int pos, int len){
+	char *substr = malloc(len+1);
+	if (!substr)
+		return NULL;
+	
+	memcpy(substr, &str[pos], len);
+	substr[len] = '\0';
+
+	return substr;
+}
 #ifdef __cplusplus
 }
 #endif

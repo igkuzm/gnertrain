@@ -2,7 +2,7 @@
  * File              : menu.h
  * Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
  * Date              : 13.11.2022
- * Last Modified Date: 14.11.2022
+ * Last Modified Date: 19.11.2022
  * Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
  */
 
@@ -19,28 +19,24 @@ open_file(GFile *file, GtkTextBuffer *buffer){
 	g_print("OPEN FILE: %s\n", filename);
 
 	const char *basename = g_file_get_basename(file);
-	char **tokens = NULL;
-	int count = strsplit(basename, ".", &tokens);
-	if (count > 0){
-		char *extension = tokens[count -1];
-		if (extension){
-			if (strcmp(extension, "doc") == 0 
-					|| strcmp(extension, "DOC") == 0
-					|| strcmp(extension, "Doc") == 0
-			   ){
-				const char *text = readdocs_doc(filename);
-				g_print("TEXT: %s\n", text);
-				gtk_text_buffer_set_text(buffer, text, -1);
-			}
-			if (strcmp(extension, "docx") == 0 
-					|| strcmp(extension, "DOCX") == 0
-					|| strcmp(extension, "Docx") == 0
-					|| strcmp(extension, "DocX") == 0
-			   ){
-				const char *text = readdocs_docx(filename);
-				gtk_text_buffer_set_text(buffer, text, -1);
-			}			
+	char *extension = strisplit(basename, ".", -1);
+	if (extension){
+		if (strcmp(extension, "doc") == 0 
+				|| strcmp(extension, "DOC") == 0
+				|| strcmp(extension, "Doc") == 0
+		   ){
+			const char *text = readdocs_doc(filename);
+			g_print("TEXT: %s\n", text);
+			gtk_text_buffer_set_text(buffer, text, -1);
 		}
+		if (strcmp(extension, "docx") == 0 
+				|| strcmp(extension, "DOCX") == 0
+				|| strcmp(extension, "Docx") == 0
+				|| strcmp(extension, "DocX") == 0
+		   ){
+			const char *text = readdocs_docx(filename);
+			gtk_text_buffer_set_text(buffer, text, -1);
+		}			
 	}
 }
 
