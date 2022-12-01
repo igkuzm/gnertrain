@@ -2,7 +2,7 @@
  * File              : menu.h
  * Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
  * Date              : 13.11.2022
- * Last Modified Date: 19.11.2022
+ * Last Modified Date: 01.12.2022
  * Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
  */
 
@@ -22,12 +22,12 @@ open_file(GFile *file, GtkTextBuffer *buffer){
 	char *extension = strisplit(basename, ".", -1);
 	if (extension){
 		if (strcmp(extension, "doc") == 0 
-				|| strcmp(extension, "DOC") == 0
-				|| strcmp(extension, "Doc") == 0
-		   ){
-			const char *text = readdocs_doc(filename);
-			g_print("TEXT: %s\n", text);
-			gtk_text_buffer_set_text(buffer, text, -1);
+				//|| strcmp(extension, "DOC") == 0
+				//|| strcmp(extension, "Doc") == 0
+		   //){
+			//const char *text = readdocs_doc(filename);
+			//g_print("TEXT: %s\n", text);
+			//gtk_text_buffer_set_text(buffer, text, -1);
 		}
 		if (strcmp(extension, "docx") == 0 
 				|| strcmp(extension, "DOCX") == 0
@@ -74,7 +74,7 @@ open_file_dialog (GtkButton *button,
 			gtk_object_get_data(GTK_OBJECT(user_data), "buffer"));
 
 	GtkFileFilter *filter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(filter, "*.[dD][oO][cC]");
+	//gtk_file_filter_add_pattern(filter, "*.[dD][oO][cC]");
 	gtk_file_filter_add_pattern(filter, "*.[dD][oO][cC][xX]");
 	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 	gtk_widget_show (dialog);
