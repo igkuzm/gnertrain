@@ -18,26 +18,26 @@ open_file(GFile *file, GtkTextBuffer *buffer){
 	const char *filename = g_file_get_path(file);
 	g_print("OPEN FILE: %s\n", filename);
 
-	const char *basename = g_file_get_basename(file);
-	char *extension = strisplit(basename, ".", -1);
-	if (extension){
-		if (strcmp(extension, "doc") == 0 
+	//const char *basename = g_file_get_basename(file);
+	//char *extension = strisplit(basename, ".", -1);
+	//if (extension){
+		//if (strcmp(extension, "doc") == 0 
 				//|| strcmp(extension, "DOC") == 0
 				//|| strcmp(extension, "Doc") == 0
 		   //){
 			//const char *text = readdocs_doc(filename);
 			//g_print("TEXT: %s\n", text);
 			//gtk_text_buffer_set_text(buffer, text, -1);
-		}
-		if (strcmp(extension, "docx") == 0 
-				|| strcmp(extension, "DOCX") == 0
-				|| strcmp(extension, "Docx") == 0
-				|| strcmp(extension, "DocX") == 0
-		   ){
+		//}
+		//if (strcmp(extension, "docx") == 0 
+				//|| strcmp(extension, "DOCX") == 0
+				//|| strcmp(extension, "Docx") == 0
+				//|| strcmp(extension, "DocX") == 0
+		   //){
 			const char *text = readdocs_docx(filename);
 			gtk_text_buffer_set_text(buffer, text, -1);
-		}			
-	}
+		//}			
+	//}
 }
 
 static void
@@ -84,6 +84,101 @@ open_file_dialog (GtkButton *button,
 					NULL);	
 }
 
+struct tag {
+	char name[32];
+	int start;
+	int end;
+};
+
+void save_to_file(char *filename, GtkTextBuffer *buffer){
+	//open file to write
+	FILE *fp = fopen(filename, "w");
+	if (!fp)
+		return;
+
+	//iterate text buffer
+	int line;
+	int count = gtk_text_buffer_get_line_count(buffer);
+	for (line = 0; line < count; line++) {
+		//for each line in text buffer	
+		fputs("(\"", fp);
+		GtkTextIter *iter;
+		gtk_text_buffer_get_iter_at_line(
+				buffer, iter, line);
+
+		//allocate tags
+		struct tag *tags = malloc(100*sizeof(struct tag));
+		if (!tags)
+			return;
+		int tags_c = 0;
+
+		int i = 0;
+		while(!gtk_text_iter_ends_line(iter)){
+			//for earch iter in line
+			char c = gtk_text_iter_get_char(iter);	
+			fputc(c, fp);
+
+			//get tag
+			if (gtk_text_iter_begins_tag(iter, NULL)){
+				//get tag name
+				tags[tags_c].name[0] = 0;
+				//GSList *list = gtk_text_iter_get_tags(iter);
+				//if (list){
+					//GtkTextTag *tag = list->data;
+					//if (tag) {
+						//GValue *value;
+						//g_object_get_property(G_OBJECT(tag), "name", value);
+						//const char *name = g_value_get_string(value);
+						//strncpy(tags[tags_c].name, name, 31);
+						//tags[tags_c].name[31] = 0;
+						//tags[tags_c].start = i; 
+					//}
+				//}
+
+			};
+			if (gtk_text_iter_ends_tag(iter, NULL)){
+				tags[tags_c++].end = i; 
+			}
+
+			//iterate
+			gtk_text_iter_forward_char(iter);
+			i++;
+		}
+
+		//write tags
+		fputs("\", {\"entities\": [", fp);
+		for (i = 0; i < tags_c; i++) {
+			if (i > 0)
+				fputc(',', fp);
+
+			struct tag tag = tags[i];
+			
+			fputc('(', fp);
+			char start[16]; 
+			sprintf(start, "%i", tag.start);
+			char end[16];
+			sprintf(end, "%i", tag.end);
+			fputs(start, fp);
+			fputc(',', fp);
+			fputs(end, fp);
+			fputc(',', fp);
+			fputc('\"', fp);
+			fputs(tag.name, fp);
+			fputc('\"', fp);
+			fputc(')', fp);
+		}
+		fputs("]})", fp);
+		
+		//free tags
+		free(tags);
+		
+		fputc('\n', fp);
+	}
+
+	//close file
+	fclose(fp);
+}
+
 void
 save_file_dialog (GtkButton *button,
 		gpointer   user_data)
@@ -114,7 +209,8 @@ save_file_dialog (GtkButton *button,
 		char *filename;
 
 		filename = gtk_file_chooser_get_filename (chooser);
-		/*save_to_file (filename);*/
+		GtkTextBuffer *buffer = gtk_object_get_data(GTK_OBJECT(user_data), "buffer");
+		save_to_file (filename, buffer);
 		g_free (filename);
 	  }
 
