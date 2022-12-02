@@ -2,7 +2,7 @@
  * File              : menu.h
  * Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
  * Date              : 13.11.2022
- * Last Modified Date: 01.12.2022
+ * Last Modified Date: 02.12.2022
  * Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
  */
 
@@ -11,6 +11,7 @@
 #include <string.h>
 #include "readdocs/readdocs.h"
 #include "strsplit.h"
+#include "entities.h"
 
 static void 
 open_file(GFile *file, GtkTextBuffer *buffer){
@@ -90,7 +91,7 @@ struct tag {
 	int end;
 };
 
-void save_to_file(char *filename, GtkTextBuffer *buffer){
+void save_to_file(char *filename, GtkTextBuffer *buffer, struct entity **ent){
 	//open file to write
 	FILE *fp = fopen(filename, "w");
 	if (!fp)
@@ -115,29 +116,38 @@ void save_to_file(char *filename, GtkTextBuffer *buffer){
 		int i = 0;
 		while(!gtk_text_iter_ends_line(iter)){
 			//for earch iter in line
-			char c = gtk_text_iter_get_char(iter);	
-			fputc(c, fp);
+			gunichar c = gtk_text_iter_get_char(iter);	
+			if (c != 0 && c != 0xFFFC){
+				//fputc(c, fp);
+				char buf[6];
+				gint len = g_unichar_to_utf8(c, buf);
+				int k;
+				for (k = 0; k < len; ++k) {
+					fputc(buf[k], fp);
+				}
+			}
 
 			//get tag
 			if (gtk_text_iter_begins_tag(iter, NULL)){
 				//get tag name
 				tags[tags_c].name[0] = 0;
-				//GSList *list = gtk_text_iter_get_tags(iter);
-				//if (list){
-					//GtkTextTag *tag = list->data;
-					//if (tag) {
-						//GValue *value;
-						//g_object_get_property(G_OBJECT(tag), "name", value);
-						//const char *name = g_value_get_string(value);
+				GSList *list = gtk_text_iter_get_tags(iter);
+				if (list){
+					GtkTextTag *tag = list->data;
+					if (tag) {
+						gchar *name;
+						g_object_get(G_OBJECT(tag), "name", &name, NULL);
+						struct entity *e = entity_with_colo(ent, name);
+						strncpy(tags[tags_c].name, e->name, 31);
 						//strncpy(tags[tags_c].name, name, 31);
-						//tags[tags_c].name[31] = 0;
-						//tags[tags_c].start = i; 
-					//}
-				//}
+						tags[tags_c].name[31] = 0;
+						tags[tags_c].start = i; 
+					}
+				}
 
 			};
 			if (gtk_text_iter_ends_tag(iter, NULL)){
-				tags[tags_c++].end = i; 
+				tags[tags_c++].end = i - 1; 
 			}
 
 			//iterate
@@ -210,7 +220,8 @@ save_file_dialog (GtkButton *button,
 
 		filename = gtk_file_chooser_get_filename (chooser);
 		GtkTextBuffer *buffer = gtk_object_get_data(GTK_OBJECT(user_data), "buffer");
-		save_to_file (filename, buffer);
+		struct entity **entities = gtk_object_get_data(GTK_OBJECT(user_data), "entities");
+		save_to_file (filename, buffer, entities);
 		g_free (filename);
 	  }
 

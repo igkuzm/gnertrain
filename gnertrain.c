@@ -2,7 +2,7 @@
  * File              : gnertrain.c
  * Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
  * Date              : 12.11.2022
- * Last Modified Date: 14.11.2022
+ * Last Modified Date: 02.12.2022
  * Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
  */
 
@@ -70,21 +70,21 @@ int main(int argc, char *argv[]) {
 	GtkWidget *buttonbox = gtk_vbox_new(FALSE, 0);
 	gtk_paned_add2(GTK_PANED(paned), buttonbox);
 
-	char *ents[] = {"NO", "PERS", "DIAG", "MKB", NULL};
-	char *colo[] = {NULL, "red", "green", "blue", NULL};
-
-	gtk_text_buffer_create_tag(buffer, "default_bg", "background", "white", NULL); 
-	for (i=0; ents[i]; ++i){
+	struct entity **entities = entities_init();
+	gtk_object_set_data(GTK_OBJECT(window), "entities", entities);
+	for (i=0; entities[i]; ++i){
 		GtkWidget *button = gtk_button_new();
-		gtk_button_set_label(GTK_BUTTON(button), ents[i]);
-		if (colo[i]){
+		gtk_button_set_label(GTK_BUTTON(button), entities[i]->name);
+		if (i > 0){
 			GdkColor color;
-			gdk_color_parse (colo[i], &color);
+			gdk_color_parse (entities[i]->colo, &color);
 			gtk_widget_modify_bg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
-			gtk_text_buffer_create_tag(buffer, colo[i], "background", colo[i], NULL); 
+			gtk_text_buffer_create_tag(buffer, 
+						entities[i]->colo, "background", entities[i]->colo, NULL); 
+			gtk_object_set_data(GTK_OBJECT(button), "colo", entities[i]->colo);
 		}
-		gtk_object_set_data(GTK_OBJECT(button), "colo", colo[i]);
-		gtk_object_set_data(GTK_OBJECT(button), "ent", ents[i]);
+		else 
+			gtk_object_set_data(GTK_OBJECT(button), "colo", NULL);
 		gtk_box_pack_start(GTK_BOX(buttonbox), button, FALSE, FALSE, 0);
 		g_signal_connect(G_OBJECT(button), "clicked", 
 				G_CALLBACK(button_clicked), textView);
