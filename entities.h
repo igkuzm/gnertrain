@@ -22,7 +22,7 @@ struct entity {
 
 char *colors[] = {
 	"a0",                  // no color
-	"aliceblue",
+	//"aliceblue",
 	"antiquewhite",
 	/*"aqua",*/
 	/*"aquamarine",*/

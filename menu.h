@@ -117,6 +117,7 @@ void save_to_file(char *filename, GtkTextBuffer *buffer, struct entity **ent){
 		int tags_c = 0;
 
 		int i = 0;
+		gboolean has_tag = FALSE;
 		while(!gtk_text_iter_ends_line(iter)){
 			//for earch iter in line
 			gunichar c = gtk_text_iter_get_char(iter);	
@@ -145,18 +146,23 @@ void save_to_file(char *filename, GtkTextBuffer *buffer, struct entity **ent){
 						//strncpy(tags[tags_c].name, name, 31);
 						tags[tags_c].name[31] = 0;
 						tags[tags_c].start = i; 
+						has_tag = TRUE;
 					}
 				}
 
 			};
 			if (gtk_text_iter_ends_tag(iter, NULL)){
 				tags[tags_c++].end = i - 1; 
+				has_tag = FALSE;
 			}
 
 			//iterate
 			gtk_text_iter_forward_char(iter);
 			i++;
 		}
+		//close tag if in the end of line
+		//if(has_tag)
+			//tags[tags_c++].end = i - 1; 
 
 		//write tags
 		fputs("\", {\"entities\": [", fp);
@@ -273,11 +279,13 @@ main_menu_bar(GtkWidget * window)
 	gtk_menu_shell_append(GTK_MENU_SHELL(editMenu), undoMi);
 	gtk_widget_add_accelerator(undoMi, "activate", accel_group, 
 			GDK_z, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); 	
+	gtk_widget_set_sensitive(undoMi, FALSE);
 	
 	GtkWidget *redoMi = gtk_image_menu_item_new_from_stock(GTK_STOCK_REDO, accel_group);
 	gtk_menu_shell_append(GTK_MENU_SHELL(editMenu), redoMi);
 	gtk_widget_add_accelerator(redoMi, "activate", accel_group, 
 			GDK_y, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE); 	
+	gtk_widget_set_sensitive(redoMi, FALSE);
 
 	return menubar;
 }
