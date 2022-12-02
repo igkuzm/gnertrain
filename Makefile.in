@@ -67,8 +67,8 @@ ifeq ($(TARGETOS),Linux)
 endif
 ifeq ($(TARGETOS),Windows)
 	BUILD_DIR=build
-	LDFLAGS += -LGTK_win32/ -L$(BUILD_DIR)
-	WINDOWSGUI = -mwindows
+	LDFLAGS += -Lopt/GTK2SDK-mingw32 -L$(BUILD_DIR) -lgio-2.0
+	#WINDOWSGUI = -mwindows
 endif
 
 
@@ -78,7 +78,7 @@ EXECUTABLE=$(BUILD_DIR)/GNerdTrain
 
 all: $(EXECUTABLE)
 
-$(BUILD_DIR)/GNerdTrain: $(BUILD_DIR)/*.o $(BUILD_DIR)/docx/*.o $(BUILD_DIR)/doc/*.o
+$(BUILD_DIR)/GNerdTrain: $(BUILD_DIR)/*.o $(BUILD_DIR)/docx/*.o #$(BUILD_DIR)/doc/*.o
 	$(CC)  $^ -o $@ -L$(BUILD_DIR) $(CFLAGS) $(LDFLAGS) $(GTKLIBS) $(GTKCFLAGS) $(WINDOWSGUI) 
 
 #docx
@@ -89,10 +89,10 @@ $(BUILD_DIR)/docx/*.o: readdocs/docx.c readdocs/zip/src/zip.c readdocs/ezxml/ezx
 	$(CC) -c readdocs/ezxml/ezxml.c -o $(BUILD_DIR)/docx/ezxml.o
 
 #doc
-$(BUILD_DIR)/doc/*.o: readdocs/doc.c readdocs/libdoc/*.c
-	mkdir -p $(BUILD_DIR)/doc
-	$(CC) -c readdocs/doc.c -o $(BUILD_DIR)/doc/doc.o
-	cd $(BUILD_DIR)/doc && $(CC) -c ../../readdocs/libdoc/*.c
+#$(BUILD_DIR)/doc/*.o: readdocs/doc.c readdocs/libdoc/*.c
+	#mkdir -p $(BUILD_DIR)/doc
+	#$(CC) -c readdocs/doc.c -o $(BUILD_DIR)/doc/doc.o
+	#cd $(BUILD_DIR)/doc && $(CC) -c ../../readdocs/libdoc/*.c
 
 
 

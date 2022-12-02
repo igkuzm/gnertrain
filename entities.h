@@ -184,35 +184,35 @@ struct entity **entities_init(){
 
 	//load file
 	GKeyFile *key_file = g_key_file_new ();
-	g_key_file_load_from_file(key_file, CONFIG_FILE, 0, NULL);
-	
-	//get keys
-	gsize len;
-	GError *err = NULL;
-	gchar ** entities = 
-			g_key_file_get_keys(key_file, "entities", &len, &err);	
+	if (g_key_file_load_from_file(key_file, CONFIG_FILE, 0, NULL)){
+		//get keys
+		gsize len;
+		GError *err = NULL;
+		gchar ** entities = 
+				g_key_file_get_keys(key_file, "entities", &len, &err);	
 
-	if (err)
-		perror(err->message);
-
-	for (i = 1; i < len + 1; ++i) {
-		e[i] = malloc(sizeof(struct entity));
-		if (!none)
-			break;
-		
-		strncpy(e[i]->name, entities[i-1], 31);
-		e[i]->name[31] = 0;
-		strcpy(e[i]->colo, colors[i]);
-
-		//description
-		err = NULL;
-		gchar *desc = 
-				g_key_file_get_string(key_file, "entities", entities[i-1], &err);
 		if (err)
 			perror(err->message);
-		
-		strncpy(e[i]->desc, desc, 127);
-		e[i]->desc[127] = 0;		
+
+		for (i = 1; i < len + 1; ++i) {
+			e[i] = malloc(sizeof(struct entity));
+			if (!none)
+				break;
+			
+			strncpy(e[i]->name, entities[i-1], 31);
+			e[i]->name[31] = 0;
+			strcpy(e[i]->colo, colors[i]);
+
+			//description
+			err = NULL;
+			gchar *desc = 
+					g_key_file_get_string(key_file, "entities", entities[i-1], &err);
+			if (err)
+				perror(err->message);
+			
+			strncpy(e[i]->desc, desc, 127);
+			e[i]->desc[127] = 0;		
+		}
 	}
 
 	g_key_file_free(key_file);

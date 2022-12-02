@@ -15,9 +15,10 @@
 #include "entities.h"
 
 static void 
-open_file(GFile *file, GtkTextBuffer *buffer){
+//open_file(GFile *file, GtkTextBuffer *buffer){
+open_file(gchar *filename, GtkTextBuffer *buffer){
 	
-	const char *filename = g_file_get_path(file);
+	//const char *filename = g_file_get_path(file);
 	g_print("OPEN FILE: %s\n", filename);
 
 	//const char *basename = g_file_get_basename(file);
@@ -49,7 +50,8 @@ on_open_response (GtkDialog *dialog,
 	GtkTextBuffer *buffer = gtk_object_get_data(GTK_OBJECT(dialog), "buffer");	
 	if (response == GTK_RESPONSE_ACCEPT){
 		GtkFileChooser *chooser = GTK_FILE_CHOOSER (dialog);
-		GFile *file = gtk_file_chooser_get_file (chooser);
+		//GFile *file = gtk_file_chooser_get_file (chooser);
+		gchar *file = gtk_file_chooser_get_filename(chooser);
 		open_file (file, buffer);
 	}
 	gtk_widget_destroy (GTK_WIDGET(dialog));
