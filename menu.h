@@ -10,9 +10,34 @@
 #include <gio/gio.h>
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
+#include <stdint.h>
 #include "readdocs/readdocs.h"
 #include "strsplit.h"
 #include "entities.h"
+
+//int is_big_endian(void)
+//{
+    //union {
+        //uint32_t i;
+        //char c[4];
+    //} e = { 0x01000000 };
+
+    //return e.c[0];
+//}
+
+//uint32_t UNICHAR_SW (uint32_t i)
+//{
+    //unsigned char c1, c2, c3, c4;
+
+	//c1 = i & 255;
+	//c2 = (i >> 8) & 255;
+	//c3 = (i >> 16) & 255;
+	//c4 = (i >> 24) & 255;
+
+	//return ((int)c1 << 24) + 
+		   //((int)c2 << 16) + 
+		   //((int)c3 << 8)  + c4;
+//}
 
 static void 
 //open_file(GFile *file, GtkTextBuffer *buffer){
@@ -123,6 +148,8 @@ void save_to_file(char *filename, GtkTextBuffer *buffer, struct entity **ent){
 			gunichar c = gtk_text_iter_get_char(iter);	
 			if (c != 0 && c != 0xFFFC){
 				//fputc(c, fp);
+				//if (is_big_endian)
+					//c = UNICHAR_SW(c);
 				char buf[6];
 				gint len = g_unichar_to_utf8(c, buf);
 				int k;
