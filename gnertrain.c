@@ -79,7 +79,8 @@ int main(int argc, char *argv[]) {
 			GdkColor color;
 			//gdk_color_parse (entities[i]->colo, &color);
 			gdk_color_parse ("#b22222", &color);
-			gtk_widget_modify_bg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
+			//gtk_widget_modify_bg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
+			gtk_widget_modify_fg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
 			gtk_text_buffer_create_tag(buffer, 
 						entities[i]->colo, "background", entities[i]->colo, NULL); 
 			gtk_object_set_data(GTK_OBJECT(button), "colo", entities[i]->colo);
