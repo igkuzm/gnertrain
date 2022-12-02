@@ -73,15 +73,14 @@ int main(int argc, char *argv[]) {
 	struct entity **entities = entities_init();
 	gtk_object_set_data(GTK_OBJECT(window), "entities", entities);
 	for (i=0; entities[i]; ++i){
-		GtkWidget *button = gtk_button_new();
+		/*GtkWidget *button = gtk_button_new();*/
+		GtkWidget *button = gtk_color_button_new();
 		gtk_button_set_label(GTK_BUTTON(button), entities[i]->name);
 		if (i > 0){
-			//GdkColor color;
-			GdkColor color = {0, 0xffff, 0x0000, 0x0000};
-			//gdk_color_parse (entities[i]->colo, &color);
-			//gdk_color_parse ("#b22222", &color);
-			//gtk_widget_modify_bg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
-			gtk_widget_modify_fg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
+			GdkColor color;
+			gdk_color_parse (entities[i]->colo, &color);
+			/*gtk_widget_modify_bg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);*/
+			gtk_color_button_set_color(GTK_COLOR_BUTTON(button), &color);
 			gtk_text_buffer_create_tag(buffer, 
 						entities[i]->colo, "background", entities[i]->colo, NULL); 
 			gtk_object_set_data(GTK_OBJECT(button), "colo", entities[i]->colo);
