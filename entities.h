@@ -24,68 +24,68 @@ char *colors[] = {
 	"a0",                  // no color
 	"aliceblue",
 	"antiquewhite",
-	"aqua",
-	"aquamarine",
+	/*"aqua",*/
+	/*"aquamarine",*/
 	/*"azure",*/
 	/*"beige",*/
 	/*"bisque",*/
 	/*"black",*/
 	/*"blanchedalmond",*/
 	"blue",
-	"blueviolet",
+	/*"blueviolet",*/
 	"brown",
-	"burlywood",
-	"cadetblue",
-	"chartreuse",
+	/*"burlywood",*/
+	/*"cadetblue",*/
+	/*"chartreuse",*/
 	"chocolate",
 	"coral",
-	"cornflowerblue",
-	"cornsilk",
-	"crimson",
+	/*"cornflowerblue",*/
+	/*"cornsilk",*/
+	/*"crimson",*/
 	"cyan",
 	"darkblue",
 	"darkcyan",
-	"darkgoldenrod",
+	/*"darkgoldenrod",*/
 	"darkgray",
 	"darkgreen",
-	"darkgrey",
-	"darkkhaki",
-	"darkmagenta",
-	"darkolivegreen",
+	/*"darkgrey",*/
+	/*"darkkhaki",*/
+	/*"darkmagenta",*/
+	/*"darkolivegreen",*/
 	"darkorange",
-	"darkorchid",
+	/*"darkorchid",*/
 	"darkred",
-	"darksalmon",
-	"darkseagreen",
-	"darkslateblue",
-	"darkslategray",
-	"darkturquoise",
+	/*"darksalmon",*/
+	/*"darkseagreen",*/
+	/*"darkslateblue",*/
+	/*"darkslategray",*/
+	/*"darkturquoise",*/
 	"darkviolet",
-	"deeppink",
-	"deepskyblue",
-	"dimgray",
-	"dodgerblue",
-	"firebrick",
-	"floralwhite",
-	"forestgreen",
-	"fuchsia",
-	"gainsboro",
-	"ghostwhite",
+	/*"deeppink",*/
+	/*"deepskyblue",*/
+	/*"dimgray",*/
+	/*"dodgerblue",*/
+	/*"firebrick",*/
+	/*"floralwhite",*/
+	/*"forestgreen",*/
+	/*"fuchsia",*/
+	/*"gainsboro",*/
+	/*"ghostwhite",*/
 	"gold",
-	"goldenrod",
+	/*"goldenrod",*/
 	"gray",
 	"green",
 	"greenyellow",
-	"honeydew",
-	"hotpink",
-	"indianred",
+	/*"honeydew",*/
+	/*"hotpink",*/
+	/*"indianred",*/
 	"indigo",
-	"ivory",
-	"khaki",
-	"lavender",
-	"lavenderblush",
-	"lawngreen",
-	"lemonchiffon",
+	/*"ivory",*/
+	/*"khaki",*/
+	/*"lavender",*/
+	/*"lavenderblush",*/
+	/*"lawngreen",*/
+	/*"lemonchiffon",*/
 	"lightblue",
 	"lightcoral",
 	"lightcyan",
