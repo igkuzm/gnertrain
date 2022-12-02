@@ -76,9 +76,10 @@ int main(int argc, char *argv[]) {
 		GtkWidget *button = gtk_button_new();
 		gtk_button_set_label(GTK_BUTTON(button), entities[i]->name);
 		if (i > 0){
-			GdkColor color;
+			//GdkColor color;
+			GdkColor color = {0, 0xffff, 0x0000, 0x0000};
 			//gdk_color_parse (entities[i]->colo, &color);
-			gdk_color_parse ("#b22222", &color);
+			//gdk_color_parse ("#b22222", &color);
 			//gtk_widget_modify_bg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
 			gtk_widget_modify_fg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
 			gtk_text_buffer_create_tag(buffer, 
