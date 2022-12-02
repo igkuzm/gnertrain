@@ -77,7 +77,8 @@ int main(int argc, char *argv[]) {
 		gtk_button_set_label(GTK_BUTTON(button), entities[i]->name);
 		if (i > 0){
 			GdkColor color;
-			gdk_color_parse (entities[i]->colo, &color);
+			//gdk_color_parse (entities[i]->colo, &color);
+			gdk_color_parse ("red", &color);
 			gtk_widget_modify_bg ( GTK_WIDGET(button), GTK_STATE_NORMAL, &color);
 			gtk_text_buffer_create_tag(buffer, 
 						entities[i]->colo, "background", entities[i]->colo, NULL); 
