@@ -161,8 +161,8 @@ void save_to_file(char *filename, GtkTextBuffer *buffer, struct entity **ent){
 			i++;
 		}
 		//close tag if in the end of line
-		//if(has_tag)
-			//tags[tags_c++].end = i - 1; 
+		if(has_tag)
+			tags[tags_c++].end = i - 1; 
 
 		//write tags
 		fputs("\", {\"entities\": [", fp);
