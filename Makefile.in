@@ -1,7 +1,7 @@
 # File              : Makefile.in
 # Author            : Igor V. Sementsov <ig.kuzm@gmail.com>
 # Date              : 05.10.2021
-# Last Modified Date: 14.11.2022
+# Last Modified Date: 02.12.2022
 # Last Modified By  : Igor V. Sementsov <ig.kuzm@gmail.com>
 #!/usr/bin/make -f
 
@@ -101,9 +101,10 @@ $(BUILD_DIR)/*.o: *.c
 	#🟢Create build directory
 	mkdir -p $(BUILD_DIR)
 	#🟢Compile sources to objects
-	$(foreach arch, $(ARCHS), $(foreach source, $^, mkdir -p $(BUILD_DIR)/$(arch); $(CC) -c $(source) -arch $(arch) -o $(BUILD_DIR)/$(arch)/$(source:%.c=%.o) $(GTKLIBS) $(GTKCFLAGS); ) )
+	#$(foreach arch, $(ARCHS), $(foreach source, $^, mkdir -p $(BUILD_DIR)/$(arch); $(CC) -c $(source) -arch $(arch) -o $(BUILD_DIR)/$(arch)/$(source:%.c=%.o) $(GTKLIBS) $(GTKCFLAGS); ) )
+	$(foreach source, $^, mkdir -p $(BUILD_DIR); $(CC) -c $(source) -o $(BUILD_DIR)/$(source:%.c=%.o) $(GTKLIBS) $(GTKCFLAGS); )
 	#🟢Lipo objects to FAT
-	$(foreach source, $^, lipo -create $(foreach arch, $(ARCHS), $(BUILD_DIR)/$(arch)/$(source:%.c=%.o) ) -o $(BUILD_DIR)/$(source:%.c=%.o); )
+	#$(foreach source, $^, lipo -create $(foreach arch, $(ARCHS), $(BUILD_DIR)/$(arch)/$(source:%.c=%.o) ) -o $(BUILD_DIR)/$(source:%.c=%.o); )
 
 clean:
 	$(RM) -r build

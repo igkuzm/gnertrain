@@ -7,6 +7,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <gio/gio.h>
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
 #include "readdocs/readdocs.h"
